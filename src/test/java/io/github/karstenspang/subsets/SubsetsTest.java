@@ -10,12 +10,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.Spliterator;
 import java.util.TreeSet;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
@@ -134,5 +136,12 @@ class SubsetsTest {
             Collections.singleton(7)
         );
         assertEquals(expected,subsets.stream().filter(set->set.size()==1).collect(Collectors.toList()));
+    }
+    
+    @Test
+    void spliteratorOneElement(){
+        Subsets<TestEnum> subsets=new Subsets<>(EnumSet.noneOf(TestEnum.class));
+        Spliterator<Set<TestEnum>> spliterator=subsets.spliterator();
+        assertNull(spliterator.trySplit());
     }
 }
