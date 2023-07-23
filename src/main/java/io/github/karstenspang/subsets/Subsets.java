@@ -19,6 +19,8 @@ import java.util.stream.StreamSupport;
 
 /**
  * Calculates all subsets of a given {@link Set}.
+ * The {@link Set} implementation used for the subsets is controlled by a
+ * {@link Supplier}{@code <}{@link Set}{@code >} defined at construction time.
  *<p>
  * This implementation is limited to sets with no more than 62 elements.
  * Trust me, you don't want to use it on anything bigger, since the complexity is O(n*2**n).
@@ -68,7 +70,6 @@ public class Subsets<T> implements Iterable<Set<T>> {
         this(set,getSupplier(set));
     }
     
-    @SuppressWarnings({"unchecked","rawtypes"})
     private static <U> Supplier<Set<U>> getSupplier(Set<U> set){
         if (set instanceof EnumSet){
             // Raw types are needed here, because otherwise the
@@ -101,6 +102,7 @@ public class Subsets<T> implements Iterable<Set<T>> {
     
     /**
      * Get an {@link Iterator} over the subsets.
+     * @return an iterator that is ordered if the input set is ordered.
      */
     @Override
     public Iterator<Set<T>> iterator(){return new SubsetIterator();}
@@ -154,6 +156,7 @@ public class Subsets<T> implements Iterable<Set<T>> {
     
     /**
      * Get a {@link Spliterator} over the subsets.
+     * @return a spliterator that is ordered if the input set is ordered.
      */
     @Override
     public Spliterator<Set<T>> spliterator(){
@@ -198,6 +201,7 @@ public class Subsets<T> implements Iterable<Set<T>> {
     
     /**
      * Get a {@link Stream} of the subsets.
+     * @return a parallel stream based on {@link #spliterator()}.
      */
     public Stream<Set<T>> stream(){
         return StreamSupport.stream(spliterator(),true);
